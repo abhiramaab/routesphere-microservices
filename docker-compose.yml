@@ -1,0 +1,109 @@
+version: '3.9'
+
+services:
+
+  rds:
+    build: ./rds/rds
+    container_name: rds
+    ports:
+      - "8761:8761"
+
+  gateway:
+    build: ./routesphere-api-gateway/routesphere-api-gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  auth:
+    build: ./auth_service/auth_service
+    container_name: auth
+    ports:
+      - "8089:8089"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  vehicle:
+    build: ./routesphere-vehicle-service/routesphere-vehicle-service
+    container_name: vehicle
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  driver:
+    build: ./routesphere-driver-service/routesphere-driver-service
+    container_name: driver
+    ports:
+      - "8084:8084"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  shipment:
+    build: ./routesphere-shipment-service/routesphere-shipment-service
+    container_name: shipment
+    ports:
+      - "8083:8083"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  invoice:
+    build: ./routesphere-invoice-service/routesphere-invoice-service
+    container_name: invoice
+    ports:
+      - "8085:8085"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  trip:
+    build: ./routesphere-trip-service/routesphere-trip-service
+    container_name: trip
+    ports:
+      - "8086:8086"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  maintenance:
+    build: ./maintenance_service/maintenance_service
+    container_name: maintenance
+    ports:
+      - "8087:8087"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  fuellog:
+    build: ./fuellog_service/fuellog_service
+    container_name: fuellog
+    ports:
+      - "8088:8088"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  customer:
+    build: ./routesphere-customer-service/routesphere-customer-service
+    container_name: customer
+    ports:
+      - "8090:8090"
+    depends_on:
+      - rds
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
